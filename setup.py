@@ -31,6 +31,7 @@ EXTRAS_REQUIRED = {
     'sql-server': ['pyodbc>=4.0.17,<4.1.0', 'SQLAlchemy>=1.1.14,<1.2.0'],
     'aws': ['boto3>=1.7.35,<1.8.0']
 }
+EXTRAS_REQUIRED['all'] = [r for reqs in EXTRAS_REQUIRED.values() for r in reqs]
 
 # The rest you shouldn't have to touch too much :)
 # ------------------------------------------------
