@@ -2,6 +2,7 @@ import io
 import json
 import logging
 
+import botocore
 import pandas as pd
 
 from . import exceptions as exc
@@ -54,6 +55,32 @@ class S3Mixin:
         """
         stream = self._format_object(obj)
         self.upload_byte_stream(stream, bucket, key)
+
+    def list_objects(self, bucket, prefix, suffix):
+        client = S3Client.resource()
+        params = {}
+        if prefix is not None:
+            params['Prefix'] = prefix
+        response = client.list_objects(Bucket=bucket, **params)
+        keys = [obj['Key'] for obj in response['Contents']]
+        if suffix is not None:
+            keys = [k for k in keys if k.endswith(suffix)]
+        return keys
+
+    def download(self, bucket, key):
+        client = S3Client.resource()
+        try:
+            stream = io.BytesIO()
+            _ = client.download_fileobj(bucket, key, stream)
+        except botocore.exceptions.ClientError as err:
+            if err.response['Error']['Code'] == "404":  # not found
+                raise Exception(
+                    'The object bucket=%s, key=%s does not exist in S3'
+                    % (bucket, key))
+            else:
+                raise err
+        stream.seek(0)
+        return stream
 
     def upload_byte_stream(self, data, bucket, key):
         """Lower-level upload method that mimics the boto method, uploading
