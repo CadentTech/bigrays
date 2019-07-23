@@ -8,7 +8,7 @@ NAME = 'bigrays'
 DESCRIPTION = 'bigrays is a framework for writing ETL jobs.'
 URL = 'https://github.com/CadentTech/bigrays'
 REQUIRES_PYTHON = '>=3.6.0'
-VERSION = '1.5.0'
+VERSION = '1.6.0'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
