@@ -217,6 +217,32 @@ class ToS3(BaseTask, mixins.S3Mixin):
         self.upload(self.input, bucket, key)
 
 
+class FromS3(BaseTask, mixins.S3Mixin):
+    required_resource = S3Client
+    bucket = REQUIRED_ATTRIBUTE
+    key = REQUIRED_ATTRIBUTE
+
+    def run(self):
+        format_kws = self.reformat_keywords()
+        bucket = self.bucket.format(**format_kws)
+        key = self.key.format(**format_kws)
+        return self.download(bucket, key)
+
+
+class ListS3Objects(BaseTask, mixins.S3Mixin):
+    required_resource = S3Client
+    bucket = REQUIRED_ATTRIBUTE
+    prefix = None
+    suffix = None
+
+    def run(self):
+        format_kws = self.reformat_keywords()
+        bucket = self.bucket.format(**format_kws)
+        prefix = None if self.prefix is None else self.prefix.format(**format_kws)
+        suffix = None if self.suffix is None else self.suffix.format(**format_kws)
+        return self.list_objects(bucket, prefix, suffix)
+
+
 class SNSTask(BaseTask, mixins.SNSMixin):
     required_resource = SNSClient
 
