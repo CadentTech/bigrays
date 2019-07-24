@@ -2,7 +2,7 @@ import logging
 
 from .functional_interface import (from_s3, list_s3_objects, sns_publish,
                                    sns_publish_email, sns_task, sql_execute,
-                                   sql_query, sql_write, to_csv, to_s3)
+                                   sql_query, sql_write, to_csv, to_s3, wrap_task)
 from .run import bigrays_run
 from .tasks import S3Task, SQLExecute, SQLQuery, SQLTask, SQLWrite, ToCSV, ToS3
 
@@ -28,4 +28,5 @@ __all__ = [
     'sns_publish',
     'sns_publish_email',
     'to_csv',
+    'wrap_task',
 ]
