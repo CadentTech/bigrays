@@ -85,14 +85,11 @@ class S3Mixin:
     def delete_object(self, bucket, key):
         client = S3Client.resource()
         try:
-            client.delete_object(bucket, key)
+            client.delete_object(Bucket=bucket, Key=key)
         except botocore.exceptions.ClientError as err:
-            if err.response['Error']['Code'] == "404":  # not found
-                raise Exception(
-                    'The object bucket=%s, key=%s does not exist in S3'
-                    % (bucket, key))
-            else:
-                raise err
+            self._logger.error(err)
+            return False
+        return True
 
     def upload_byte_stream(self, data, bucket, key):
         """Lower-level upload method that mimics the boto method, uploading
