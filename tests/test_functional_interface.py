@@ -5,11 +5,11 @@ from bigrays import functional_interface as fns
 
 
 class Test(unittest.TestCase):
-    def test__wrap_task(self):
+    def test_wrap_task(self):
         class A(Task):
             def run(self):
                 return self.a ** self.b
-        wrapped_task = fns._wrap_task('MyA', A)
+        wrapped_task = fns.wrap_task('MyA', A)
         self.assertEqual(wrapped_task(a=2, b=3), 8)
 
     def test__create_subtask(self):
@@ -24,7 +24,7 @@ class Test(unittest.TestCase):
     def test_required_attributes(self):
         class A(Task):
             a = REQUIRED_ATTRIBUTE
-        wrapped_task = fns._wrap_task('a', A)
+        wrapped_task = fns.wrap_task('a', A)
         with self.assertRaisesRegex(ValueError, 'All required attributes'):
             wrapped_task()
 
