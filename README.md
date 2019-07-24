@@ -93,6 +93,32 @@ if __name__ == '__main__':
 
 For additional examples see [the examples directory](./examples).
 
+# Functional Interface
+
+The subclass-based interface is convenient for defining pipelines of jobs since `bigrays` handles
+the boilerplate of executing the tasks in order and it is declarative. However for one-off tasks
+or tasks you want to run interactively. For this purpose bigrays comes with a functional interface.
+For each `Task` class, `bigrays` exposes a functional interface to that class. The signature of the
+function takes keyword arguments only and these arguments are the same that you would define in the
+class body of the `Task`. For example with the functional interface
+
+```
+from bigrays import tasks, bigrays_run
+
+class MyQuery(tasks.SQLQuery):
+    query = 'select top 1 * my_table'
+    
+bigrays_run(MyQuery)
+results = MyQuery.output
+```
+
+becomes
+
+```
+from bigrays import sql_query
+results = sql_query(query='select top 1 * from my_table')
+```
+
 # Additional usage details
 
 ## Task execution order
