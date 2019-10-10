@@ -253,10 +253,13 @@ class SQLSession(BaseResource):
 
 
 class BaseAWSClient:
-    required_configs = {
-        'S3_ACCESS_KEY_ID': 'aws_access_key_id',
-        'S3_SECRET_ACCESS_KEY': 'aws_secret_access_key',
-    }
+    if BigRaysConfig.AWS_REQUIRE_SECRETS:
+        required_configs = {
+            'S3_ACCESS_KEY_ID': 'aws_access_key_id',
+            'S3_SECRET_ACCESS_KEY': 'aws_secret_access_key',
+        }
+    else:
+        required_configs = {}
 
     _client_name = None
 
@@ -282,9 +285,10 @@ class S3Client(BaseAWSClient, BaseResource):
 
 
 class SNSClient(BaseAWSClient, BaseResource):
-    required_configs = {
-        'S3_ACCESS_KEY_ID': 'aws_access_key_id',
-        'S3_SECRET_ACCESS_KEY': 'aws_secret_access_key',
-        'AWS_REGION': 'region_name',
-    }
+    if BigRaysConfig.AWS_REQUIRE_SECRETS:
+        required_configs = {
+            'S3_ACCESS_KEY_ID': 'aws_access_key_id',
+            'S3_SECRET_ACCESS_KEY': 'aws_secret_access_key',
+            'AWS_REGION': 'region_name',
+        }
     _client_name = 'sns'

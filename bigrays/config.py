@@ -11,10 +11,10 @@ _logger = logging.getLogger(__name__)
 class BigRaysConfig:
 
     # default all supported values to None
-    S3_ACCESS_KEY_ID = environ.var(None)
-    S3_SECRET_ACCESS_KEY = environ.var(None)
+    AWS_REQUIRE_SECRETS = environ.bool_var(True)
+    AWS_ACCESS_KEY_ID = environ.var(None)
+    AWS_SECRET_ACCESS_KEY = environ.var(None)
     AWS_REGION = environ.var(None)
-
 
     # we could do
     #   @environ.config
