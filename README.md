@@ -155,12 +155,15 @@ follow `ToS3` it **would not** have access to any of these temporary tables.
 In order to access certain resources, the following attributes of `bigrays.config.BigraysConfig`
 may need to be set.
 
-- S3_ACCESS_KEY_ID: Required by tasks which interact with S3.
-- S3_SECRET_ACCESS_KEY: Required by tasks which interact with S3.
-- AWS_REGION: Required by tasks which interact with S3.
-- DB_USER:  Required by tasks which interact with a database.
-- DB_PWD:  Required by tasks which interact with a database.
-- DB_DSN:  Required by tasks which interact with a database.
+- AWS_REQUIRE_SECRETS: Boolean indicating if AWS credentials required. Set to
+  False if using AWS roles or ~/.aws/credentials.
+- AWS_ACCESS_KEY_ID: Required by tasks which interact with AWS services if `AWS_REQUIRE_SECRETS=TRUE`.
+- AWS_SECRET_ACCESS_KEY: Required by tasks which interact with AWS services if `AWS_REQUIRE_SECRETS=TRUE`.
+- AWS_REGION: Required by tasks which interact with AWS services if `AWS_REQUIRE_SECRETS=TRUE`.
+- DB_UID: UID value for ODBC connections
+- DB_PWD: PWD value for ODBC connections
+- DB_DSN: DSN value for ODBC connections
+- DB_FLAVOR: The SQL flavor, or dialect as compatible with `pyodbc`. E.g. `mssql`
 
 These can be assigned directly within a script (e.g. `BigraysConfig.AWS_REGION = 'us-east'`)
 or by setting the environment variable `BIGRAYS_<PARAMETER_NAME>` (e.g. `export BIGRAYS_AWS_REGION='us-east'`).
