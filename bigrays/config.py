@@ -11,7 +11,10 @@ _logger = logging.getLogger(__name__)
 class BigRaysConfig:
 
     # default all supported values to None
-    AWS_REQUIRE_SECRETS = environ.bool_var(True)
+    AWS_REQUIRE_SECRETS = environ.bool_var(
+        True,
+        help=('Are AWS credentials required?'
+              ' Set to False if using AWS roles or ~/.aws/credentials.'))
     AWS_ACCESS_KEY_ID = environ.var(None)
     AWS_SECRET_ACCESS_KEY = environ.var(None)
     AWS_REGION = environ.var(None)
@@ -22,10 +25,10 @@ class BigRaysConfig:
     # here, but from the user perspective it doesn't matter
     # and not having a nested class makes requirement checking
     # simpler in resources.py
-    DB_UID = environ.var(None)
-    DB_PWD = environ.var(None)
-    DB_DSN = environ.var(None)
-    DB_FLAVOR = environ.var('mssql')
+    DB_UID = environ.var(None, help='UID value for odbc_connect query param.')
+    DB_PWD = environ.var(None, help='PWD value for odbc_connect query param.')
+    DB_DSN = environ.var(None, help='DSN value for odbc_connect query param.')
+    DB_FLAVOR = environ.var('mssql', help='The SQL flavor, or dialect.')
     DB_ODBC_CONNECT_PARAMS = (
         'DB_DSN',
         'DB_UID',
