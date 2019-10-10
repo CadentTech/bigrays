@@ -13,8 +13,8 @@ Note:
 """
 
 import logging
-import urllib.parse
 
+from .config import BigRaysConfig
 from . import exceptions
 from .utils import ReprMixin
 
@@ -233,18 +233,12 @@ class BaseResource(ReprMixin):
 
 
 class SQLSession(BaseResource):
-    required_configs = (
-        'DB_USER',
-        'DB_PWD',
-    )
-    _odbc_connect = 'DSN={dsn};UID={user};PWD={pwd}'
-    _connect_string = 'mssql+pyodbc:///?odbc_connect=%s'
+    required_configs = BigRaysConfig.DB_ODBC_CONNECT_PARAMS
 
     @classmethod
     def _open(cls, config):
         """Create and return a `sqlalchemy.engine.Connection`."""
-        dsn, user, pwd = config.DB_DSN, config.DB_USER, config.DB_PWD
-        cls._resource = cls._create_engine(dsn, user, pwd).connect()
+        cls._resource = cls._create_engine(config.DB_CONNECT_URL).connect()
         return cls._resource
 
     @classmethod
@@ -253,12 +247,8 @@ class SQLSession(BaseResource):
         return False
 
     @classmethod
-    def _create_engine(cls, dsn, user, pwd):
+    def _create_engine(cls, connect_url):
         import sqlalchemy as sa
-        connect_string = cls._odbc_connect.format(dsn=dsn, user=user, pwd=pwd)
-        cls._logger.debug('creating engine with: %r',
-                          connect_string.replace(pwd, '***'))
-        connect_url = cls._connect_string % urllib.parse.quote_plus(connect_string)
         return sa.create_engine(connect_url)
 
 
