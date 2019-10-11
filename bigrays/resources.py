@@ -233,12 +233,12 @@ class BaseResource(ReprMixin):
 
 
 class SQLSession(BaseResource):
-    required_configs = BigRaysConfig.DB_ODBC_CONNECT_PARAMS
+    required_configs = BigRaysConfig.ODBC_CONNECT_PARAMS
 
     @classmethod
     def _open(cls, config):
         """Create and return a `sqlalchemy.engine.Connection`."""
-        cls._resource = cls._create_engine(config.DB_CONNECT_URL).connect()
+        cls._resource = cls._create_engine(config.ODBC_CONNECT_URL).connect()
         return cls._resource
 
     @classmethod
@@ -255,8 +255,8 @@ class SQLSession(BaseResource):
 class BaseAWSClient:
     if BigRaysConfig.AWS_REQUIRE_SECRETS:
         required_configs = {
-            'S3_ACCESS_KEY_ID': 'aws_access_key_id',
-            'S3_SECRET_ACCESS_KEY': 'aws_secret_access_key',
+            'AWS_ACCESS_KEY_ID': 'aws_access_key_id',
+            'AWS_SECRET_ACCESS_KEY': 'aws_secret_access_key',
         }
     else:
         required_configs = {}
@@ -287,8 +287,8 @@ class S3Client(BaseAWSClient, BaseResource):
 class SNSClient(BaseAWSClient, BaseResource):
     if BigRaysConfig.AWS_REQUIRE_SECRETS:
         required_configs = {
-            'S3_ACCESS_KEY_ID': 'aws_access_key_id',
-            'S3_SECRET_ACCESS_KEY': 'aws_secret_access_key',
+            'AWS_ACCESS_KEY_ID': 'aws_access_key_id',
+            'AWS_SECRET_ACCESS_KEY': 'aws_secret_access_key',
             'AWS_REGION': 'region_name',
         }
     _client_name = 'sns'

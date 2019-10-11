@@ -40,7 +40,7 @@ The example below demonstrates the following
 - How to define a custom task and work with output from previous tasks (`MakePredictions`).
 - How to upload the result of a previous task to S3 (`UploadPredictions`) as a CSV file.
 - How to publish to an SNS topic.
-- How to customize a `bigrays` script with paramters not known until runtime (`update_format_kws()`,
+- How to customize a `bigrays` script with parameters not known until runtime (`update_format_kws()`,
   `PullTrainingData`, `PullProductionData`, `UploadPredictions`).
 
 
@@ -102,7 +102,7 @@ For each `Task` class, `bigrays` exposes a functional interface to that class. T
 function takes keyword arguments only and these arguments are the same that you would define in the
 class body of the `Task`. For example with the functional interface
 
-```
+```python
 from bigrays import tasks, bigrays_run
 
 class MyQuery(tasks.SQLQuery):
@@ -114,7 +114,7 @@ results = MyQuery.output
 
 becomes
 
-```
+```python
 from bigrays import sql_query
 results = sql_query(query='select top 1 * from my_table')
 ```
@@ -155,24 +155,19 @@ follow `ToS3` it **would not** have access to any of these temporary tables.
 In order to access certain resources, the following attributes of `bigrays.config.BigraysConfig`
 may need to be set.
 
-- AWS_REQUIRE_SECRETS: Boolean indicating if AWS credentials required. Set to
+- `AWS_REQUIRE_SECRETS`: Boolean indicating if AWS credentials required. Set to
   False if using AWS roles or ~/.aws/credentials.
-- AWS_ACCESS_KEY_ID: Required by tasks which interact with AWS services if `AWS_REQUIRE_SECRETS=TRUE`.
-- AWS_SECRET_ACCESS_KEY: Required by tasks which interact with AWS services if `AWS_REQUIRE_SECRETS=TRUE`.
-- AWS_REGION: Required by tasks which interact with AWS services if `AWS_REQUIRE_SECRETS=TRUE`.
-- DB_UID: UID value for ODBC connections
-- DB_PWD: PWD value for ODBC connections
-- DB_DSN: DSN value for ODBC connections
-- DB_FLAVOR: The SQL flavor, or dialect as compatible with `pyodbc`. E.g. `mssql`
+- `AWS_ACCESS_KEY_ID`: Required by tasks which interact with AWS services if `AWS_REQUIRE_SECRETS=TRUE`.
+- `AWS_SECRET_ACCESS_KEY`: Required by tasks which interact with AWS services if `AWS_REQUIRE_SECRETS=TRUE`.
+- `AWS_REGION`: Required by tasks which interact with AWS services if `AWS_REQUIRE_SECRETS=TRUE`.
+- `ODBC_UID`: UID value for ODBC connections
+- `ODBC_PWD`: PWD value for ODBC connections
+- `ODBC_DSN`: DSN value for ODBC connections
+- `ODBC_FLAVOR`: The SQL flavor, or dialect as compatible with `pyodbc`. E.g. `mssql`
+- `ODBC_CONNECT_PARAMS`: List of query parameters to include. Should be a comma separated list, e.g. `'ODBC_UID,ODBC_PWD,ODBC_DSN'` of the corresponding `BigRaysConfig` attributes.
 
 These can be assigned directly within a script (e.g. `BigraysConfig.AWS_REGION = 'us-east'`)
 or by setting the environment variable `BIGRAYS_<PARAMETER_NAME>` (e.g. `export BIGRAYS_AWS_REGION='us-east'`).
-
-At run time `bigrays` will actually look for all environment variables prefixed with `BIGRAYS_` and
-add these attributes to `BigraysConfig` allowing users to customize `bigrays` configuration. For example
-`export BIGRAYS_MY_CONFIG=1` results in `BigraysConfig.MY_CONFIG == '1'`. Note that all configurations values
-inferred from the command line will be interpretted as strings and assigning values directly to `BigraysConfig`
-takes precedence over environment variables.
 
 # Logging
 By default `bigrays` logs silently to a null handler. However, the `bigrays` logger can be
