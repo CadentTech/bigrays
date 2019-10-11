@@ -164,7 +164,7 @@ may need to be set.
 - `ODBC_PWD`: PWD value for ODBC connections
 - `ODBC_DSN`: DSN value for ODBC connections
 - `ODBC_FLAVOR`: The SQL flavor, or dialect as compatible with `pyodbc`. E.g. `mssql`
-- `ODBC_CONNECT_PARAMS`: List of query parameters to include
+- `ODBC_CONNECT_PARAMS`: List of query parameters to include. Should be a comma separated list, e.g. `'ODBC_UID,ODBC_PWD,ODBC_DSN'` of the corresponding `BigRaysConfig` attributes.
 
 These can be assigned directly within a script (e.g. `BigraysConfig.AWS_REGION = 'us-east'`)
 or by setting the environment variable `BIGRAYS_<PARAMETER_NAME>` (e.g. `export BIGRAYS_AWS_REGION='us-east'`).
