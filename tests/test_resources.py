@@ -153,17 +153,17 @@ class TestBaseAWSClient(unittest.TestCase):
     @mock.patch('boto3.client')
     def test_S3Client__open(self, mock_client):
         class MockConfig:
-            S3_ACCESS_KEY_ID = 1
-            S3_SECRET_ACCESS_KEY = 2
-            S3_REGION = 3
+            AWS_ACCESS_KEY_ID = 1
+            AWS_SECRET_ACCESS_KEY = 2
+            AWS_REGION = 3
         S3Client._open(MockConfig)
         mock_client.assert_called_with('s3', aws_access_key_id=1, aws_secret_access_key=2)
 
     @mock.patch('boto3.client')
     def test_SNSClient__open(self, mock_client):
         class MockConfig:
-            S3_ACCESS_KEY_ID = 1
-            S3_SECRET_ACCESS_KEY = 2
+            AWS_ACCESS_KEY_ID = 1
+            AWS_SECRET_ACCESS_KEY = 2
             AWS_REGION = 3
         SNSClient._open(MockConfig)
         mock_client.assert_called_with('sns', aws_access_key_id=1, aws_secret_access_key=2, region_name=3)
