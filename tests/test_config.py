@@ -22,7 +22,7 @@ class TestConfig(unittest.TestCase):
                 mock.patch.object(BigRaysConfig, 'ODBC_PWD', 'bar'), \
                 mock.patch.object(BigRaysConfig, 'ODBC_DSN', 'baz'), \
                 mock.patch.object(BigRaysConfig, 'ODBC_FLAVOR', 'itsmysql'), \
-                mock.patch.object(BigRaysConfig, 'ODBC_CONNECT_PARAMS', ['DSN', 'UID', 'PWD']), \
+                mock.patch.object(BigRaysConfig, 'ODBC_CONNECT_PARAMS', ['ODBC_DSN', 'ODBC_UID', 'ODBC_PWD']), \
                 mock.patch('bigrays.config.urllib.parse.quote_plus', lambda x: x):
             expected = 'itsmysql+pyodbc:///?odbc_connect=DSN=baz;UID=foo;PWD=bar'
             actual = BigRaysConfig.ODBC_CONNECT_URL
@@ -31,7 +31,7 @@ class TestConfig(unittest.TestCase):
         with mock.patch.object(BigRaysConfig, 'ODBC_UID', 'foo'), \
                 mock.patch.object(BigRaysConfig, 'ODBC_PWD', 'bar'), \
                 mock.patch.object(BigRaysConfig, 'ODBC_SERVER', 'baz'), \
-                mock.patch.object(BigRaysConfig, 'ODBC_CONNECT_PARAMS', ['UID', 'PWD', 'SERVER']), \
+                mock.patch.object(BigRaysConfig, 'ODBC_CONNECT_PARAMS', ['ODBC_UID', 'ODBC_PWD', 'ODBC_SERVER']), \
                 mock.patch.object(BigRaysConfig, 'ODBC_FLAVOR', 'itsmysql'), \
                 mock.patch('bigrays.config.urllib.parse.quote_plus', lambda x: x):
             expected = 'itsmysql+pyodbc:///?odbc_connect=UID=foo;PWD=bar;SERVER=baz'
