@@ -36,20 +36,16 @@ class Config:
     ODBC_DSN = environ.var(None, help='DSN value for odbc_connect query parameter.')
     ODBC_SERVER = environ.var(None, help='Server value for odbc_connect query parameter.')
     ODBC_PORT = environ.var(None, help='Port value for odbc_connect query parameter.')
-    ODBC_FLAVOR = environ.var('mssql', help='The SQL flavor, or dialect.')
     ODBC_DRIVER = environ.var(None, help='The ODBC connection driver, e.g. "{ODBC Driver 17 for SQL Server}"')
+    ODBC_FLAVOR = environ.var('mssql', help='The SQL flavor, or dialect.')
 
-    ODBC_CONNECT_PARAMS = environ.var((
-        'ODBC_DSN',
-        'ODBC_UID',
-        'ODBC_PWD',
-    ), converter=_tuple_converter)
+    ODBC_CONNECT_PARAMS = environ.var('SERVER,PORT,DRIVER,UID,PWD', converter=_tuple_converter)
     _connect_string = '{flavor}+pyodbc:///?odbc_connect={odbc_connect}'
 
     @property
     def ODBC_CONNECT_URL(self):
         odbc_connect = ';'.join(
-            '%s=%s' % (k.replace('ODBC_', ''), getattr(self, k))
+            '%s=%s' % (k.replace('ODBC_', ''), getattr(self, f'ODBC_{k}'))
             for k in self.ODBC_CONNECT_PARAMS)
         connect_url = self._connect_string.format(
             flavor=self.ODBC_FLAVOR,
