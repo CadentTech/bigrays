@@ -14,7 +14,7 @@ VERSION = '0.11.0'
 REQUIRED = [
     # package: version
     'pandas>=0.25.0,<0.26.0',
-    'environ>=1.0,<=1.1',
+    'environ-config>=19.1.0,<=19.2.0',
 ]
 
 # These are packages required for non-essential functionality, e.g. loading
