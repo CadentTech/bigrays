@@ -7,10 +7,8 @@ import environ
 _logger = logging.getLogger(__name__)
 
 
-def _tuple_converter(s):
-    if isinstance(s, tuple):
-        return s
-    return tuple(s.split(','))
+def _odbc_connect_params(s):
+    return tuple(f'ODBC_{ss}' for ss in s.split(','))
 
 
 @environ.config(prefix='BIGRAYS')
@@ -34,15 +32,12 @@ class Config:
     ODBC_UID = environ.var(None, help='UID value for odbc_connect query parameter.')
     ODBC_PWD = environ.var(None, help='PWD value for odbc_connect query parameter.')
     ODBC_DSN = environ.var(None, help='DSN value for odbc_connect query parameter.')
-    ODBC_SERVER = environ.var(None, help='DSN value for odbc_connect query parameter.')
-    ODBC_FLAVOR = environ.var('mssql', help='The SQL flavor, or dialect.')
+    ODBC_SERVER = environ.var(None, help='Server value for odbc_connect query parameter.')
+    ODBC_PORT = environ.var(None, help='Port value for odbc_connect query parameter.')
     ODBC_DRIVER = environ.var(None, help='The ODBC connection driver, e.g. "{ODBC Driver 17 for SQL Server}"')
+    ODBC_FLAVOR = environ.var('mssql', help='The SQL flavor, or dialect.')
 
-    ODBC_CONNECT_PARAMS = environ.var((
-        'ODBC_DSN',
-        'ODBC_UID',
-        'ODBC_PWD',
-    ), converter=_tuple_converter)
+    ODBC_CONNECT_PARAMS = environ.var('SERVER,PORT,DRIVER,UID,PWD', converter=_odbc_connect_params)
     _connect_string = '{flavor}+pyodbc:///?odbc_connect={odbc_connect}'
 
     @property
@@ -56,5 +51,10 @@ class Config:
         )
         return connect_url
 
+BigRaysConfig = Config.from_environ()
 
-BigRaysConfig = environ.to_config(Config)
+
+if __name__ == '__main__':
+    print('bigrays configurations. Set the following environment variables or '
+          'assign to bigrays.config.BigRaysConfig directly.')
+    print(BigRaysConfig.generate_help())

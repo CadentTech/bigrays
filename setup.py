@@ -13,7 +13,8 @@ VERSION = '0.11.0'
 # What packages are required for this module to be executed?
 REQUIRED = [
     # package: version
-    'pandas>=0.23.0,<0.24.0',
+    'pandas>=0.25.0,<0.26.0',
+    'environ>=1.0,environ<=1.1',
 ]
 
 # These are packages required for non-essential functionality, e.g. loading
